@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lab 2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <style>
+        body {
+            text-align: center;
+        }
+        
+        #btns {
+            padding: 25px;
+        }
+        
+        table {
+            width: 100%;
+        }
+        
+        th {
+            padding: 5px;
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        th,
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>ITMD - 465 / 565 - Lab 2</h1>
+    <h2>Brandon Sansone | bsansone@hawk.iit.edu</h2>
+    <div id="btns">
+        <button onclick="ajaxLoadData()" type="button" id="loadDataBtn">Load Data</button>
+        <button onclick="ajaxDelData()" type="button" id="deleteDataBtn" disabled>Reset</button>
+    </div>
+
+
+    <h2>Employee List</h2>
+
+    <div id="results">
+        <table id="myTable">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Title</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Active</th>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        function ajaxLoadData() {
+            var myRequest = new XMLHttpRequest();
+            myRequest.onreadystatechange = function () {
+                if (myRequest.readyState === 4 && myRequest.status === 200) {
+                    var myArray = JSON.parse(myRequest.responseText);
+                    parseData(myArray);
+                }
+            };
+            myRequest.open('GET', 'http://libertyville.rice.iit.edu/scripts/lab2.php', true);
+            myRequest.send();
+
+            document.getElementById('loadDataBtn').disabled = true;
+            document.getElementById('deleteDataBtn').disabled = false;
+        }
+
+        function parseData(arr) {
+            var resultsDiv = document.getElementById('myTable');
+            var header = document.getElementById('myTable');
+            
+            header.innerHTML = '<tr><th>ID</th>' + '<th>First Name</th>' + '<th>Last Name</th>' + '<th>Title</th>' + '<th>Email</th>' + '<th>Gender</th>' + '<th>Active</th>' + '</tr>';
+
+            for (var i = 0; i < arr.length; i++) {
+
+                resultsDiv.innerHTML += '<tr><td>' + arr[i].id + '</td>' + '<td>' + arr[i].first_name + '</td>' + '<td>' + arr[i].last_name + '</td>' + '<td>' + arr[i].title + '</td>' + '<td>' + arr[i].email + '</td>' + '<td>' + arr[i].gender + '</td>' + '<td>' + arr[i].active + '</td></tr>';
+            };
+
+        }
+
+        function ajaxDelData(arr) {
+            var resultsDiv = document.getElementById('myTable');
+            var header = document.getElementById('myTable');
+            
+            resultsDiv.innerHTML = " ";
+            
+            header.innerHTML = '<tr><th>ID</th>' + '<th>First Name</th>' + '<th>Last Name</th>' + '<th>Title</th>' + '<th>Email</th>' + '<th>Gender</th>' + '<th>Active</th>' + '</tr>';
+            
+            document.getElementById('loadDataBtn').disabled = false;
+            document.getElementById('deleteDataBtn').disabled = true;
+        }
+    </script>
+</body>
+
+</html>
